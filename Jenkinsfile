@@ -37,22 +37,18 @@ pipeline {
             }
         }
 
-    stage('publish to artifactory') {
-	    steps {
-		script {
-			def derver = Artifactory.newServer url: 'https://mallikarjunajethin.jfrog.io', credentialsId: 'f3da7459-9fb1-4b1f-a2d8-5f3f6819ff81'
-			def uploadSpec = """{
-                         "files": [
-			   {
-                                "pattern": "target/*.jar",
-				"target": "mallikarjunajethin/"
-                           }
-			]
-                  }"""
-			server.upload(uploadSpec)
-		}
-	    }
-       }
+    stage('Upload to Artifactory') {
+            steps {
+                // Upload the package to Artifactory using JFrog CLI
+                script {
+                    def packagePath = "target/*.jar" // Adjust the path to your Maven artifact
+                    def repoKey = "mallikarjunajethin" // Artifactory repository key
+                    def version = "1.0.0" // Package version
+                    
+                    sh "jfrog rt u ${packagePath} ${repoKey}/path/in/artifactory/${version}"
+                }
+            }
+        }
 		    
     stage('datacopy') {
        steps {
