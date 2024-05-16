@@ -16,7 +16,7 @@ pipeline {
             steps {
                 // Deploy the Maven artifact to Artifactory
 	        //sh 'mvn deploy'
-                sh 'jf rt upload --url http://192.168.29.129:8082/artifactory/ --access-token ${ARTIFACTORY-ACCESS-TOKEN} target/maven-demo-one-1.0.0.jar maven-demo-one/'
+                sh 'jf rt upload --url http://192.168.29.129:8082/artifactory/ --access-token 08da0ef9-67d7-4719-988d-989c2bc93d85 target/maven-demo-one-1.0.0.jar maven-demo-one/'
             }
         }
 
