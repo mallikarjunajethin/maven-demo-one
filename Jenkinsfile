@@ -49,7 +49,8 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         docker.withRegistry("${env.DOCKER_REGISTRY}", "${env.DOCKER_USERNAME}", "${env.DOCKER_PASSWORD}") {
                             // Push the Docker image to the registry
-                            docker.image("${env.DOCKER_IMAGE_TAG}").push()
+                            def customImage = docker.image("${env.DOCKER_IMAGE_TAG}")
+			    customImage.push()
                         }
                     }
                 }
