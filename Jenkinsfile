@@ -36,20 +36,24 @@ pipeline {
     }
 
 
-    stage('push') {
+    stage('Push Docker Image') {
+            environment {
+			DOCKER_REGISTRY = 'http://192.168.29.129:8082/artifactory/maven-demo-one-docker/'
+			IMAGE_NAME = 'maven-demo-one:${BUILD_NUMBER}'
+			CREDENTIAL_ID = 'docker-hub-cred'
+               }
             steps {
-                // Log in to Docker Hub
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-cred', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
-                    sh "docker login http://192.168.29.129:8082/artifactory/maven-demo-one-docker -u ${env.DOCKER_HUB_USERNAME} -p ${env.DOCKER_HUB_PASSWORD}"
+                script {
+                    // Login to the Docker registry using Jenkins credentials
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        docker.withRegistry("${env.DOCKER_REGISTRY}", "${env.DOCKER_USERNAME}", "${env.DOCKER_PASSWORD}") {
+                            // Push the Docker image to the registry
+                            docker.image("${env.IMAGE_NAME}").push()
+                        }
+                    }
                 }
-                
-                // Push Docker image to Docker Hub
-                sh "docker push http://192.168.29.129:8082/artifactory/maven-demo-one-docker/maven-demo-one:${BUILD_NUMBER}"
-                
-                // Log out from Docker Hub
-                sh "docker logout"
-           }
-        }	    
+	     }
+	 }	    
     
    }
 }
