@@ -40,13 +40,13 @@
     <distributionManagement>
     <repository>
         <id>central</id>
-        <name>a0nwh2xcpyygd-artifactory-primary-0-releases</name>
-        <url>https://mallikarjunajethin.jfrog.io/artifactory/mallikarjunajethin</url>
+        <name>malli-releases</name>
+        <url>http://192.168.29.129:8081/artifactory/maven-demo-one</url>
     </repository>
     <snapshotRepository>
         <id>snapshots</id>
-        <name>a0nwh2xcpyygd-artifactory-primary-0-snapshots</name>
-        <url>https://mallikarjunajethin.jfrog.io/artifactory/mallikarjunajethin</url>
+        <name>malli-snapshots</name>
+        <url>http://192.168.29.129:8081/artifactory/maven-demo-one</url>
     </snapshotRepository>
 </distributionManagement>
 </project>
