@@ -48,8 +48,10 @@ pipeline {
                     // Login to the Docker registry using Jenkins credentials
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh "docker login -u ${env.DOCKER_USERNAME} -p ${env.DOCKER_PASSWORD} ${env.DOCKER_REGISTRY}"
-                            // Push the Docker image to the registry
-                            sh "docker push ${env.IMAGE_NAME}:${BUILD_NUMBER}"
+			sh "echo ${env.DOCKER_PASSWORD} | docker login -u ${env.DOCKER_USERNAME} --password-stdin ${env.DOCKER_REGISTRY}"
+                        
+                        // Push the Docker image to the registry
+                        sh "docker push ${env.IMAGE_NAME}:${BUILD_NUMBER}"
                         }
                     }
                 }
