@@ -39,7 +39,7 @@ pipeline {
     stage('Push Docker Image') {
             environment {
 			DOCKER_REGISTRY = 'http://192.168.29.129:8082/artifactory/maven-demo-one-docker/'
-			IMAGE_NAME = 'maven-demo-one:${BUILD_NUMBER}'
+			IMAGE_NAME = "maven-demo-one:${BUILD_NUMBER}"
 			CREDENTIAL_ID = 'docker-hub-cred'
                }
             steps {
