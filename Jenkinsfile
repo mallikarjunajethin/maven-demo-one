@@ -12,14 +12,20 @@ pipeline {
                 sh 'mvn clean package'
             }
     }
-
-    stage('Build Docker Image') {
+    stage('Deploy to artifactory') {
             steps {
-                script {
-                    docker.build("mallikarjunajethin/maven-demo-one:${BUILD_NUMBER}")
-                }
+                // Deploy the Maven artifact to Artifactory
+                sh 'mvn deploy'
             }
-    }
+        }
+
+    //stage('Build Docker Image') {
+    //        steps {
+    //            script {
+    //                docker.build("mallikarjunajethin/maven-demo-one:${BUILD_NUMBER}")
+    //            }
+    //        }
+    //}
 
 
     //stage('push') {
@@ -37,20 +43,20 @@ pipeline {
      //       }
      //   }
 
-    stage('Publish to Artifactory') {
-            steps {
-                // Publish Maven artifacts to Artifactory using the JFrog Artifactory plugin
-                rtMavenDeployer (
-                    id: 'f3da7459-9fb1-4b1f-a2d8-5f3f6819ff81', // ID for this Artifactory server configuration in Jenkins
-                    serverId: 'mallikarjunajethin', // Artifactory server ID configured in Jenkins
-                    deployMavenDescriptors: true,
-                    deployIvyDescriptors: false,
-                    deployArtifacts: true,
-                    artifactsPattern: '**/target/*.jar', // Pattern to match Maven artifacts
-                    resolver: 'maven-default' // ID of the resolver to use for resolving dependencies
-                )
-            }
-        }
+    //stage('Publish to Artifactory') {
+    //        steps {
+    //            // Publish Maven artifacts to Artifactory using the JFrog Artifactory plugin
+    //            rtMavenDeployer (
+    //                id: 'f3da7459-9fb1-4b1f-a2d8-5f3f6819ff81', // ID for this Artifactory server configuration in Jenkins
+    //                serverId: 'mallikarjunajethin', // Artifactory server ID configured in Jenkins
+    //                deployMavenDescriptors: true,
+    //                deployIvyDescriptors: false,
+    //                deployArtifacts: true,
+    //                artifactsPattern: '**/target/*.jar', // Pattern to match Maven artifacts
+    //                resolver: 'maven-default' // ID of the resolver to use for resolving dependencies
+    //            )
+     //       }
+    //    }
 		    
     stage('datacopy') {
        steps {
