@@ -12,13 +12,20 @@ pipeline {
                 sh 'mvn clean package'
             }
     }
-    stage('Deploy to artifactory') {
-            steps {
-                // Deploy the Maven artifact to Artifactory
-	        //sh 'mvn deploy'
-                sh 'jf rt upload --url http://192.168.29.129:8082/artifactory/ --access-token 08da0ef9-67d7-4719-988d-989c2bc93d85 target/maven-demo-one-1.0.0.jar maven-demo-one/'
-            }
-        }
+    stage('Upload to Artifactory') {
+	environment {
+        ARTIFACTORY_URL = 'http://192.168.29.129:8082/artifactory/'
+        REPOSITORY = 'maven-demo-one'
+    }
+		steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'jfrog-id-login', usernameVariable: 'ARTIFACTORY_USERNAME', passwordVariable: 'ARTIFACTORY_PASSWORD')]) {
+                        // Use the injected credentials in your JFrog CLI command
+                        sh "jf rt u --url ${env.ARTIFACTORY_URL} --user ${env.ARTIFACTORY_USERNAME} --password ${env.ARTIFACTORY_PASSWORD} target/*.jar ${env.REPOSITORY}/"
+                    }
+                }
+	    }
+	}
 
     //stage('Build Docker Image') {
     //        steps {
