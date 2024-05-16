@@ -40,7 +40,7 @@ pipeline {
             steps {
                 // Log in to Docker Hub
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-cred', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
-                    sh "docker login http://192.168.29.129:8082/artifactory/ -u ${DOCKER_HUB_USERNAME} -p ${DOCKER_HUB_PASSWORD}"
+                    sh "docker login http://192.168.29.129:8082/artifactory/maven-demo-one-docker -u ${env.DOCKER_HUB_USERNAME} -p ${env.DOCKER_HUB_PASSWORD}"
                 }
                 
                 // Push Docker image to Docker Hub
