@@ -30,7 +30,7 @@ pipeline {
     stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${env.DOCKER_IMAGE_TAG}")
+                    docker.build("maven-demo-docker:${BUILD_NUMBER}")
                 }
             }
     }
