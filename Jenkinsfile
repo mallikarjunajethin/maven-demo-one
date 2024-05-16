@@ -7,25 +7,25 @@ pipeline {
         git branch: 'main', url: 'https://github.com/mallikarjunajethin/maven-demo-one.git'
       }
     }
-    //stage('Build Maven Project') {
-    //    steps {
-    //            sh 'mvn clean package'
-    //        }
-    //}
-    //stage('Upload to Artifactory') {
-    //	environment {
-    //    ARTIFACTORY_URL = 'https://mallikarjunajethin.jfrog.io/artifactory/'
-    //    REPOSITORY = 'mallikarjunajethin'
-    // }
-//		steps {
-  //              script {
-    //                withCredentials([usernamePassword(credentialsId: 'jfrog-hub-login', usernameVariable: 'ARTIFACTORY_USERNAME', passwordVariable: 'ARTIFACTORY_PASSWORD')]) {
-      //                  // Use the injected credentials in your JFrog CLI command
-       //                 sh "jf rt u --url ${env.ARTIFACTORY_URL} --user ${env.ARTIFACTORY_USERNAME} --password ${env.ARTIFACTORY_PASSWORD} target/*.jar ${env.REPOSITORY}/"
-       //             }
-      //          }
-//	    }
-//	}
+    stage('Build Maven Project') {
+        steps {
+                sh 'mvn clean package'
+            }
+    }
+    stage('Upload to Artifactory') {
+    	environment {
+        ARTIFACTORY_URL = 'https://mallikarjunajethin.jfrog.io/artifactory/'
+        REPOSITORY = 'mallikarjunajethin'
+     }
+		steps {
+               script {
+                    withCredentials([usernamePassword(credentialsId: 'jfrog-hub-login', usernameVariable: 'ARTIFACTORY_USERNAME', passwordVariable: 'ARTIFACTORY_PASSWORD')]) {
+                        // Use the injected credentials in your JFrog CLI command
+                        sh "jf rt u --url ${env.ARTIFACTORY_URL} --user ${env.ARTIFACTORY_USERNAME} --password ${env.ARTIFACTORY_PASSWORD} target/*.jar ${env.REPOSITORY}/"
+                    }
+                }
+	    }
+	}
 
     stage('Build Docker Image') {
             steps {
@@ -38,21 +38,22 @@ pipeline {
 
     stage('Push Docker Image') {
             environment {
-			DOCKER_REGISTRY = 'https://mallikarjunajethin.jfrog.io/'
+			DOCKER_REGISTRY = 'mallikarjunajethin.jfrog.io/mallikarjunajethin-docker-local'
 			IMAGE_NAME = 'maven-demo-docker'
 			CREDENTIAL_ID = 'docker-hub-login'
-		        DOCKER_IMAGE_TAG = "${env.IMAGE_NAME}:${env.BUILD_NUMBER}"
+		        DOCKER_HUB_URL= 'https://mallikarjunajethin.jfrog.io/'
                }
             steps {
                 script {
                     // Login to the Docker registry using Jenkins credentials
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-login', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        docker.withRegistry("${env.DOCKER_REGISTRY}", "${env.DOCKER_USERNAME}", "${env.DOCKER_PASSWORD}") {
-                            // Push the Docker image to the registry
-                            docker.image("${env.IMAGE_NAME}:${BUILD_NUMBER}").push()
+                        sh "docker login -u ${env.DOCKER_USERNAME} -p ${env.DOCKER_PASSWORD} ${env.DOCKER_HUB_URL}"
+
+			sh "docker tag ${env.IMAGE_NAME}:${BUILD_NUMBER} ${env.DOCKER_REGISTRY}/${env.IMAGE_NAME}:${BUILD_NUMBER}"
+                        // Push the Docker image to the registry
+                        sh "docker push ${env.DOCKER_REGISTRY}/${env.IMAGE_NAME}:${BUILD_NUMBER}"
                         }
                     }
-                }
                 }
 	     } 
    }
