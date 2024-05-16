@@ -30,7 +30,7 @@ pipeline {
     stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("maven-demo-one:${BUILD_NUMBER}")
+                    docker.build("${env.DOCKER_IMAGE_TAG}")
                 }
             }
     }
@@ -39,8 +39,9 @@ pipeline {
     stage('Push Docker Image') {
             environment {
 			DOCKER_REGISTRY = 'http://192.168.29.129:8082/artifactory/maven-demo-one-docker/'
-			IMAGE_NAME = "maven-demo-one:${BUILD_NUMBER}"
+			IMAGE_NAME = 'maven-demo-one'
 			CREDENTIAL_ID = 'docker-hub-cred'
+		        DOCKER_IMAGE_TAG = "${env.IMAGE_NAME}:${env.BUILD_NUMBER}"
                }
             steps {
                 script {
@@ -48,7 +49,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         docker.withRegistry("${env.DOCKER_REGISTRY}", "${env.DOCKER_USERNAME}", "${env.DOCKER_PASSWORD}") {
                             // Push the Docker image to the registry
-                            docker.image("${env.IMAGE_NAME}").push()
+                            docker.image("${env.DOCKER_IMAGE_TAG}").push()
                         }
                     }
                 }
