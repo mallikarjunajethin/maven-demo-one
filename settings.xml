@@ -1,0 +1,21 @@
+<settings>
+    <servers>
+        <server>
+            <id>central</id>
+            <username>smreddy0486@gmail.com</username>
+            <password>Sangireddy@123</password>
+        </server>
+    </servers>
+    <servers>
+        <server>
+            <id>central</id>
+            <username>smreddy0486@gmail.com</username>
+            <password>Sangireddy@123</password>
+        </server>
+        <server>
+            <id>snapshots</id>
+            <username>smreddy0486@gmail.com</username>
+            <password>Sangireddy@123</password>
+        </server>
+    </servers>
+</settings>
