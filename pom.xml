@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.mallikarjuna</groupId>
-    <artifactId>maven-demo</artifactId>
+    <artifactId>maven-demo-one</artifactId>
     <version>1.0</version>
 
-    <name>maven-demo</name>
+    <name>maven-demo-one</name>
     <url></url>
 
     <parent>
