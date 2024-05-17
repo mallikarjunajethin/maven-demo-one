@@ -1,7 +1,13 @@
-FROM openjdk:11-jre-slim
+# You can change this base image to anything else
+# But make sure to use the correct version of Java
+FROM adoptopenjdk/openjdk11:alpine-jre
 
-WORKDIR /app
+# Simply the artifact path
+ARG artifact=target/maven-demo-one.jar
 
-COPY target/maven-demo-one-1.0.0.jar .
+WORKDIR /opt/app
 
-CMD ["java", "-jar", "maven-demo-one-1.0.0.jar"]
+COPY ${artifact} app.jar
+
+# This should not be changed
+ENTRYPOINT ["java","-jar","app.jar"]
