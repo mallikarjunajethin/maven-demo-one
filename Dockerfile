@@ -3,11 +3,10 @@
 FROM adoptopenjdk/openjdk11:alpine-jre
 
 # Simply the artifact path
-ARG artifact=target/maven-demo-one.jar
+#ARG artifact=target/maven-demo.jar
 
-WORKDIR /opt/app
+WORKDIR /app
 
-COPY ${artifact} app.jar
+COPY target/maven-demo.jar .
 
-# This should not be changed
-ENTRYPOINT ["java","-jar","app.jar"]
+CMD ["java", "-jar", "maven-demo.jar"]
