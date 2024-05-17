@@ -51,7 +51,7 @@
 
     <build>
 
-        <finalName>spring-boot-web</finalName>
+        <finalName>maven-demo-one</finalName>
 
         <plugins>
             <plugin>
